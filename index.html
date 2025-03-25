@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NonProfit.xyz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;600;800;900&family=Poppins:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <!-- GSAP Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8B5CF6', /* Vibrant purple */
+                        secondary: '#EC4899', /* Vibrant pink */
+                        green: '#10B981', /* Emerald */
+                        orange: '#F97316', /* Orange */
+                        blue: '#3B82F6', /* Blue */
+                        yellow: '#FBBF24', /* Amber */
+                    },
+                    fontFamily: {
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                        'poppins': ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background-color: #fafafa;
+        }
+
+        .heading-font {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .content-box {
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .content-box:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            z-index: 3;
+        }
+
+        .illustration-container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animated background blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.15;
+            z-index: -1;
+            animation: float 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(5%, 5%) scale(1.05);
+            }
+
+            66% {
+                transform: translate(-5%, 10%) scale(0.95);
+            }
+
+            100% {
+                transform: translate(10%, -5%) scale(1.02);
+            }
+        }
+
+        .blob-delay-1 {
+            animation-delay: -2s;
+        }
+
+        .blob-delay-2 {
+            animation-delay: -4s;
+        }
+
+        .blob-delay-3 {
+            animation-delay: -6s;
+        }
+
+        .blob-delay-4 {
+            animation-delay: -8s;
+        }
+
+        /* Gradient text effect */
+        .gradient-text {
+            background: linear-gradient(to right, #8B5CF6, #EC4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        /* Button hover effect */
+        .donate-button {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.4s ease;
+        }
+
+        .donate-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #EC4899, #8B5CF6);
+            z-index: -1;
+            transition: all 0.4s ease;
+        }
+
+        .donate-button:hover::before {
+            left: 0;
+        }
+
+        /* Navbar underline effect */
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: linear-gradient(to right, #8B5CF6, #EC4899);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Image hover zoom */
+        .zoom-on-hover {
+            transition: transform 0.5s ease, filter 0.5s ease;
+            height: 100%;
+            width: 100%;
+        }
+
+        .zoom-on-hover:hover {
+            transform: scale(1.1);
+            filter: brightness(1.1);
+        }
+
+        /* Custom grid layout based on the blueprint */
+        .top-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(8, minmax(80px, auto));
+            grid-gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .top-grid-item-1 {
+            grid-column: 1 / 3;
+            grid-row: 1 / 4;
+            /* Elongated Youth box */
+        }
+
+        .top-grid-item-2 {
+            grid-column: 3 / 5;
+            grid-row: 1 / 6;
+            /* Elongated Environment/Nature box the most */
+        }
+
+        .top-grid-item-3 {
+            grid-column: 5 / 7;
+            grid-row: 1 / 4;
+            /* Elongated Animals box to match Youth */
+        }
+
+        .top-grid-item-4 {
+            grid-column: 1 / 3;
+            grid-row: 4 / 6;
+            /* Adjusted Hunger box */
+        }
+
+        .top-grid-item-5 {
+            grid-column: 5 / 7;
+            grid-row: 4 / 6;
+            /* Adjusted Education box to match Hunger */
+        }
+
+        .top-grid-item-6 {
+            grid-column: 1 / 5;
+            grid-row: 6 / 8;
+            /* Adjusted Donate box */
+        }
+
+        .top-grid-item-7 {
+            grid-column: 5 / 7;
+            grid-row: 6 / 7;
+            /* Adjusted Innovation box */
+        }
+
+        .top-grid-item-8 {
+            grid-column: 5 / 7;
+            grid-row: 7 / 8;
+            /* Adjusted Research box */
+        }
+
+        /* Bottom grid layout */
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s ease-in-out;
+        }
+
+        .mobile-menu.open {
+            height: auto;
+        }
+
+        /* Animation classes for smooth sliding effects */
+        .slide-in {
+            /* Will be animated by GSAP */
+        }
+
+        /* Image containment for proper sizing */
+        .illustration-container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            position: relative;
+            z-index: 1;
+        }
+
+        .illustration-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Mobile layout adjustments */
+        @media (max-width: 768px) {
+
+            .top-grid,
+            .bottom-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .partners-row {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .partners-row>div {
+                width: 45%;
+                margin-bottom: 1rem;
+                height: 20vw !important;
+                min-height: 80px;
+            }
+        }
+
+        .title-style {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300; /* or 100 for the thinnest version */
+    letter-spacing: 0.02em; /* slight letter spacing to match the image */
+}
+
+        /* Animated underline for Transparency title */
+        .title-underline {
+            position: relative;
+            display: inline-block;
+        }
+
+        .title-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #8B5CF6, #EC4899, #10B981, #3B82F6);
+            background-size: 300% 100%;
+            animation: gradientMove 2s infinite;
+            border-radius: 4px;
+            transition: width 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .title-underline.animate::after {
+            width: 100%;
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* 3D card effect for content boxes */
+        .card-3d-effect {
+            transform-style: preserve-3d;
+            perspective: 800px;
+        }
+
+        .card-3d-inner {
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-3d-effect:hover .card-3d-inner {
+            transform: rotateY(7deg) rotateX(3deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+    <!-- Background Blobs -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="blob bg-primary w-96 h-96 -top-20 -left-20 blob-delay-1"></div>
+        <div class="blob bg-secondary w-96 h-96 top-40 right-0 blob-delay-2"></div>
+        <div class="blob bg-green w-80 h-80 bottom-0 left-40 blob-delay-3"></div>
+        <div class="blob bg-blue w-80 h-80 bottom-20 right-40 blob-delay-4"></div>
+        <div class="blob bg-orange w-72 h-72 top-1/2 left-1/4 blob-delay-1"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-md shadow-md fixed w-full z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="text-3xl font-black heading-font">
+                <span class="text-primary">NonProfit</span><span class="text-secondary">.xyz</span>
+            </a>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#donate" class="nav-link font-medium hover:text-primary transition-colors">Donate</a>
+                <a href="#about" class="nav-link font-medium hover:text-primary transition-colors">About</a>
+                <a href="#mission" class="nav-link font-medium hover:text-primary transition-colors">Mission</a>
+                <a href="#partners" class="nav-link font-medium hover:text-primary transition-colors">Partners</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu md:hidden bg-white/95 shadow-md">
+            <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+                <a href="#donate" class="font-medium hover:text-primary transition-colors">Donate</a>
+                <a href="#about" class="font-medium hover:text-primary transition-colors">About</a>
+                <a href="#mission" class="font-medium hover:text-primary transition-colors">Mission</a>
+                <a href="#partners" class="font-medium hover:text-primary transition-colors">Partners</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 relative z-10">
+        <div class="container mx-auto px-4">
+            <!-- Hero Text - Changed to left aligned and added animated underline -->
+            <div class="text-left mb-12">
+                <h1 class="text-5xl md:text-6xl font-black heading-font mb-6">
+                    <span class="gradient-text title-underline pb-2">Transparency</span>
+                </h1>
+            </div>
+
+            <!-- Top Grid Section - Exact Blueprint Layout with varied animations -->
+            <div class="top-grid hidden md:grid">
+                <!-- Youth Box -->
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden top-grid-item-1 card-3d-effect"
+                    data-animation="fade-in-left">
+                    <div class="illustration-container bg-primary/5 card-3d-inner">
+                        <img src="child.png" alt="Youth" class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <!-- Environment Box -->
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden top-grid-item-2 card-3d-effect"
+                    data-animation="from-bottom">
+                    <div class="illustration-container bg-green/5 card-3d-inner">
+                        <img src="nature.png" alt="Environment" class="w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <!-- Animals Box -->
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden top-grid-item-3 card-3d-effect"
+                    data-animation="fade-in-right">
+                    <div class="illustration-container bg-secondary/5 card-3d-inner">
+                        <img src="shelter.png" alt="Animals" class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <!-- Hunger Box - No animation -->
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden top-grid-item-4 card-3d-effect"
+                    data-animation="no-animation">
+                    <div class="illustration-container bg-orange/5 card-3d-inner">
+                        <img src="foodbank.png" alt="Hunger" class="w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <!-- Education Box - No animation -->
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden top-grid-item-5 card-3d-effect"
+                    data-animation="no-animation">
+                    <div class="illustration-container bg-blue/5 card-3d-inner">
+                        <img src="computer science.png" alt="Education" class="w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <div id="donate" class="content-box overflow-hidden top-grid-item-6 card-3d-effect"
+                    data-animation="fade-in-up">
+                    <div
+                        class="bg-gradient-to-br from-primary to-secondary h-full rounded-2xl shadow-md p-6 text-white flex flex-col card-3d-inner">
+                        <div class="illustration-container flex items-center justify-center h-56">
+                            <svg width="280" height="260" viewBox="0 0 260 220" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Glowing center -->
+                                <circle cx="130" cy="110" r="80" fill="white" fill-opacity="0.2" />
+                                <circle cx="130" cy="110" r="50" fill="white" fill-opacity="0.3" />
+
+                                <!-- Heart -->
+                                <path
+                                    d="M130 130 C130 130 100 110 100 90 C100 70 120 70 130 85 C140 70 160 70 160 90 C160 110 130 130 130 130 Z"
+                                    fill="white" />
+
+                                <!-- Hands cupping heart -->
+                                <!-- Left hand -->
+                                <path d="M90 120 C70 120 70 140 90 150 C110 160 120 140 120 130" stroke="white"
+                                    stroke-width="5" fill="none" />
+                                <path d="M90 150 C70 140 60 150 70 160 C80 170 90 155 90 150" stroke="white"
+                                    stroke-width="5" fill="none" />
+
+                                <!-- Right hand -->
+                                <path d="M170 120 C190 120 190 140 170 150 C150 160 140 140 140 130" stroke="white"
+                                    stroke-width="5" fill="none" />
+                                <path d="M170 150 C190 140 200 150 190 160 C180 170 170 155 170 150" stroke="white"
+                                    stroke-width="5" fill="none" />
+
+                                <!-- Sparkles/stars -->
+                                <g fill="white">
+                                    <path
+                                        d="M130 45 L133 55 L143 55 L135 62 L138 72 L130 65 L122 72 L125 62 L117 55 L127 55 Z" />
+                                    <path d="M70 70 L72 77 L79 77 L73 82 L75 89 L70 84 L65 89 L67 82 L61 77 L68 77 Z" />
+                                    <path
+                                        d="M190 70 L192 77 L199 77 L193 82 L195 89 L190 84 L185 89 L187 82 L181 77 L188 77 Z" />
+                                    <path
+                                        d="M60 110 L62 117 L69 117 L63 122 L65 129 L60 124 L55 129 L57 122 L51 117 L58 117 Z" />
+                                    <path
+                                        d="M200 110 L202 117 L209 117 L203 122 L205 129 L200 124 L195 129 L197 122 L191 117 L198 117 Z" />
+                                </g>
+
+                                <!-- Support beams/people icons -->
+                                <g transform="translate(50, 170)">
+                                    <circle cx="0" cy="0" r="10" fill="white" fill-opacity="0.7" />
+                                    <circle cx="0" cy="-7" r="5" fill="white" />
+                                    <rect x="-5" y="0" width="10" height="15" rx="2" fill="white" />
+                                </g>
+                                <g transform="translate(90, 180)">
+                                    <circle cx="0" cy="0" r="10" fill="white" fill-opacity="0.7" />
+                                    <circle cx="0" cy="-7" r="5" fill="white" />
+                                    <rect x="-5" y="0" width="10" height="15" rx="2" fill="white" />
+                                </g>
+                                <g transform="translate(130, 185)">
+                                    <circle cx="0" cy="0" r="10" fill="white" fill-opacity="0.7" />
+                                    <circle cx="0" cy="-7" r="5" fill="white" />
+                                    <rect x="-5" y="0" width="10" height="15" rx="2" fill="white" />
+                                </g>
+                                <g transform="translate(170, 180)">
+                                    <circle cx="0" cy="0" r="10" fill="white" fill-opacity="0.7" />
+                                    <circle cx="0" cy="-7" r="5" fill="white" />
+                                    <rect x="-5" y="0" width="10" height="15" rx="2" fill="white" />
+                                </g>
+                                <g transform="translate(210, 170)">
+                                    <circle cx="0" cy="0" r="10" fill="white" fill-opacity="0.7" />
+                                    <circle cx="0" cy="-7" r="5" fill="white" />
+                                    <rect x="-5" y="0" width="10" height="15" rx="2" fill="white" />
+                                </g>
+
+                                <!-- Connection lines -->
+                                <line x1="60" y1="170" x2="90" y2="130" stroke="white" stroke-opacity="0.3"
+                                    stroke-width="2" />
+                                <line x1="100" y1="180" x2="110" y2="130" stroke="white" stroke-opacity="0.3"
+                                    stroke-width="2" />
+                                <line x1="130" y1="185" x2="130" y2="130" stroke="white" stroke-opacity="0.3"
+                                    stroke-width="2" />
+                                <line x1="160" y1="180" x2="150" y2="130" stroke="white" stroke-opacity="0.3"
+                                    stroke-width="2" />
+                                <line x1="200" y1="170" x2="170" y2="130" stroke="white" stroke-opacity="0.3"
+                                    stroke-width="2" />
+                            </svg>
+                        </div>
+                        <div class="mt-4 flex-grow">
+                            <h2 class="text-3xl font-bold heading-font mb-4">Make an Impact Today</h2>
+                            <p class="mb-8 text-white/90">
+                                Your donation helps us create innovative technology solutions for these critical global
+                                challenges.
+                            </p>
+                            <button
+                                class="donate-button w-full py-4 bg-white text-primary font-bold rounded-xl shadow-lg transition-all text-lg">
+                                DONATE NOW
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Innovation Box -->
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden top-grid-item-7 card-3d-effect"
+                    data-animation="fade-in-right">
+                    <div class="illustration-container bg-yellow/5 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Innovation" class="w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <!-- Research Box -->
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden top-grid-item-8 card-3d-effect"
+                    data-animation="from-bottom">
+                    <div class="illustration-container bg-primary/10 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Research" class="w-full h-full object-cover" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Layout - Stacked Boxes -->
+            <div class="md:hidden space-y-6 mb-10">
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden fade-in-up card-3d-effect"
+                    data-animation="fade-in-up">
+                    <div class="illustration-container bg-primary/5 h-48 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Youth illustration"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden zoom-in card-3d-effect"
+                    data-animation="zoom-in">
+                    <div class="illustration-container bg-green/5 h-48 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Environment illustration"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden fade-in-right card-3d-effect"
+                    data-animation="fade-in-right">
+                    <div class="illustration-container bg-secondary/5 h-48 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Animals illustration"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden fade-in-left card-3d-effect"
+                    data-animation="fade-in-left">
+                    <div class="illustration-container bg-orange/5 h-48 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Hunger illustration"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden bounce-in card-3d-effect"
+                    data-animation="bounce-in">
+                    <div class="illustration-container bg-blue/5 h-48 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Education illustration"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden flip-in card-3d-effect"
+                    data-animation="flip-in">
+                    <div class="illustration-container bg-yellow/5 h-48 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Technology illustration"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- About & Our Mission Section - Restored original structure with enhanced styling -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div id="about"
+                    class="md:col-span-2 content-box bg-white rounded-2xl shadow-md overflow-hidden p-6 fade-in-left card-3d-effect"
+                    data-animation="fade-in-left">
+                    <h2 class="text-3xl font-bold heading-font mb-4 gradient-text">About</h2>
+                    <div class="space-y-4">
+                        <p class="text-gray-600">NonProfit is dedicated to leveraging cutting-edge technology to
+                            address the world's most pressing humanitarian, environmental, and social challenges.</p>
+                        <p class="text-gray-600">Our organization brings together technologists, scientists,
+                            philanthropists, and changemakers who believe in using innovation as a force for good.</p>
+                        <p class="text-gray-600">Through strategic partnerships and targeted initiatives, we develop
+                            sustainable, scalable solutions that make a meaningful difference.</p>
+                    </div>
+                </div>
+
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden fade-in-right card-3d-effect"
+                    data-animation="fade-in-right">
+                    <div class="illustration-container bg-primary/5 h-full card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="About illustration"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+            </div>
+
+            <div id="mission"
+                class="mb-16 content-box bg-white rounded-2xl shadow-md overflow-hidden p-6 slide-up card-3d-effect"
+                data-animation="slide-up">
+                <h2 class="text-3xl font-bold heading-font mb-4"
+                    style="background: linear-gradient(to right, #10B981, #3B82F6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    Our Mission</h2>
+                <div class="space-y-4">
+                    <p class="text-gray-600">We believe that technology, when properly directed, can solve humanity's
+                        greatest challenges.</p>
+                    <p class="text-gray-600">Our mission is to identify critical problems affecting people, animals, and
+                        the planet, then develop innovative technological solutions that create measurable, lasting
+                        change.</p>
+                    <p class="text-gray-600">We're committed to transparency, evidence-based approaches, and maximizing
+                        our impact through strategic partnerships and open-source technologies.</p>
+                </div>
+            </div>
+
+            <!-- Bottom Grid Section with directional animations -->
+            <h2 class="text-3xl font-bold heading-font mb-8 gradient-text">Our Projects</h2>
+            <div class="bottom-grid hidden md:grid mb-16">
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden card-3d-effect"
+                    data-animation="fade-in-left">
+                    <div class="illustration-container bg-secondary/5 h-56 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Project 1"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden card-3d-effect"
+                    data-animation="fade-in-right">
+                    <div class="illustration-container bg-primary/5 h-56 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Project 2"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden card-3d-effect"
+                    data-animation="from-bottom">
+                    <div class="illustration-container bg-green/5 h-56 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Project 3"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden card-3d-effect"
+                    data-animation="fade-in-left">
+                    <div class="illustration-container bg-blue/5 h-56 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Project 4"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden card-3d-effect"
+                    data-animation="from-bottom">
+                    <div class="illustration-container bg-orange/5 h-56 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Project 5"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden card-3d-effect"
+                    data-animation="fade-in-right">
+                    <div class="illustration-container bg-secondary/5 h-56 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Project 6"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden card-3d-effect"
+                    data-animation="from-top">
+                    <div class="illustration-container bg-primary/5 h-56 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Project 7"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden card-3d-effect"
+                    data-animation="from-bottom">
+                    <div class="illustration-container bg-green/5 h-56 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Project 8"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Layout - Bottom Stacked Boxes -->
+            <div class="md:hidden space-y-6 mb-16">
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden fade-in-up card-3d-effect"
+                    data-animation="fade-in-up" data-delay="0.1">
+                    <div class="illustration-container bg-secondary/5 h-48 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Project 1"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden fade-in-up card-3d-effect"
+                    data-animation="fade-in-up" data-delay="0.2">
+                    <div class="illustration-container bg-primary/5 h-48 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Project 2"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden fade-in-up card-3d-effect"
+                    data-animation="fade-in-up" data-delay="0.3">
+                    <div class="illustration-container bg-green/5 h-48 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Project 3"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <div class="content-box bg-white rounded-2xl shadow-md overflow-hidden fade-in-up card-3d-effect"
+                    data-animation="fade-in-up" data-delay="0.4">
+                    <div class="illustration-container bg-blue/5 h-48 card-3d-inner">
+                        <img src="/api/placeholder/400/320" alt="Project 4"
+                            class="zoom-on-hover w-full h-full object-cover" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Partners Section - Single Row of Logos per Blueprint -->
+            <div id="partners" class="mb-16">
+                <h2 class="text-3xl font-bold heading-font mb-8 gradient-text">Our Partners</h2>
+
+                <div class="flex flex-wrap md:flex-nowrap partners-row gap-4 mb-8">
+                    <div class="content-box bg-white rounded-xl shadow-md p-6 flex items-center justify-center flex-grow fade-scale h-24 w-full"
+                        data-animation="slide-in">
+                        <div class="h-full w-full flex items-center justify-center">
+                            <img src="unesco.png" alt="Partner Logo"
+                                class="max-h-full max-w-full object-contain" />
+                        </div>
+                    </div>
+                    <div class="content-box bg-white rounded-xl shadow-md p-6 flex items-center justify-center flex-grow fade-scale h-24 w-full"
+                        data-animation="slide-in">
+                        <div class="h-full w-full flex items-center justify-center">
+                            <img src="who.png" alt="Partner Logo"
+                                class="max-h-full max-w-full object-contain" />
+                        </div>
+                    </div>
+                    <div class="content-box bg-white rounded-xl shadow-md p-6 flex items-center justify-center flex-grow fade-scale h-24 w-full"
+                        data-animation="slide-in">
+                        <div class="h-full w-full flex items-center justify-center">
+                            <img src="iucn.png" alt="Partner Logo"
+                                class="max-h-full max-w-full object-contain" />
+                        </div>
+                    </div>
+                    <div class="content-box bg-white rounded-xl shadow-md p-6 flex items-center justify-center flex-grow fade-scale h-24 w-full"
+                        data-animation="slide-in">
+                        <div class="h-full w-full flex items-center justify-center">
+                            <img src="redcross.png" alt="Partner Logo"
+                                class="max-h-full max-w-full object-contain" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-10">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">About</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Contact</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Terms</a>
+                </div>
+                <div class="mt-6 text-gray-400">
+                    <p>&copy; 2025 NonProfit.xyz. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize GSAP ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Animated underline for the title
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(() => {
+                document.querySelector('.title-underline').classList.add('animate');
+            }, 500);
+        });
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function () {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('open');
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (mobileMenu.classList.contains('open')) {
+                        mobileMenu.classList.remove('open');
+                    }
+                }
+            });
+        });
+
+        // GSAP Animations with more dramatic effects
+        // Hero text animation
+        gsap.from('h1', {
+            y: 50,
+            opacity: 0,
+            duration: 1.5,
+            ease: 'back.out(1.2)'
+        });
+
+        // Define balanced animations with moderate movement
+        const animationEffects = {
+            'fade-in-up': (element) => {
+                return gsap.fromTo(element,
+                    { y: 30, opacity: 0, visibility: 'visible' },
+                    { y: 0, opacity: 1, visibility: 'visible', duration: 0.8, ease: 'power1.out' }
+                );
+            },
+            'fade-in-right': (element) => {
+                return gsap.fromTo(element,
+                    { x: 30, opacity: 0, visibility: 'visible' },
+                    { x: 0, opacity: 1, visibility: 'visible', duration: 0.8, ease: 'power1.out' }
+                );
+            },
+            'fade-in-left': (element) => {
+                return gsap.fromTo(element,
+                    { x: -30, opacity: 0, visibility: 'visible' },
+                    { x: 0, opacity: 1, visibility: 'visible', duration: 0.8, ease: 'power1.out' }
+                );
+            },
+            'zoom-in': (element) => {
+                return gsap.fromTo(element,
+                    { scale: 0.95, opacity: 0, visibility: 'visible' },
+                    { scale: 1, opacity: 1, visibility: 'visible', duration: 0.8, ease: 'power1.out' }
+                );
+            },
+            'slide-up': (element) => {
+                return gsap.fromTo(element,
+                    { y: 30, opacity: 0, visibility: 'visible' },
+                    { y: 0, opacity: 1, visibility: 'visible', duration: 0.8, ease: 'power1.out' }
+                );
+            },
+            'scale-in': (element) => {
+                return gsap.fromTo(element,
+                    { scale: 0.95, y: 20, opacity: 0, visibility: 'visible' },
+                    { scale: 1, y: 0, opacity: 1, visibility: 'visible', duration: 0.8, ease: 'power1.out' }
+                );
+            },
+            'slide-in': (element) => {
+                return gsap.fromTo(element,
+                    { x: 30, opacity: 0, visibility: 'visible' },
+                    { x: 0, opacity: 1, visibility: 'visible', duration: 0.8, ease: 'power1.out' }
+                );
+            },
+            'from-bottom': (element) => {
+                return gsap.fromTo(element,
+                    { y: 30, opacity: 0, visibility: 'visible' },
+                    { y: 0, opacity: 1, visibility: 'visible', duration: 0.8, ease: 'power1.out' }
+                );
+            },
+            'from-top': (element) => {
+                return gsap.fromTo(element,
+                    { y: -30, opacity: 0, visibility: 'visible' },
+                    { y: 0, opacity: 1, visibility: 'visible', duration: 0.8, ease: 'power1.out' }
+                );
+            },
+            'no-animation': (element) => {
+                return gsap.to(element, {
+                    opacity: 1,
+                    visibility: 'visible',
+                    duration: 0
+                });
+            }
+        };
+
+        // Create smooth scroll-triggered subtle animations with initial visibility for key boxes
+        const batchAnimations = () => {
+            // Make sure all boxes are initially visible by default
+            gsap.set('.content-box', {
+                opacity: 1,
+                visibility: 'hidden',
+                clearProps: "transform",
+                overwrite: true
+            });
+
+            // Make specific boxes visible immediately without animation
+            document.querySelectorAll('[data-animation="no-animation"]').forEach((element) => {
+                gsap.set(element, { opacity: 1, visibility: 'visible' });
+            });
+
+            // Individual scroll triggers for reliable animations
+            document.querySelectorAll('.content-box:not([data-animation="no-animation"])').forEach((element) => {
+                const animationType = element.getAttribute('data-animation') || 'fade-in-up';
+
+                // Create scroll trigger for smooth animations
+                ScrollTrigger.create({
+                    trigger: element,
+                    start: "top 90%",
+                    once: true,
+                    onEnter: () => {
+                        // Apply the subtle slide animation
+                        animationEffects[animationType](element);
+                    }
+                });
+            });
+        };
+
+        // Initialize animations when DOM is loaded
+        window.addEventListener('DOMContentLoaded', () => {
+            // Small delay to ensure all elements are properly rendered
+            setTimeout(batchAnimations, 100);
+        });
+
+        // Floating animation for background blobs - more subtle
+        gsap.to('.blob', {
+            scale: 1.05,
+            duration: 12,
+            yoyo: true,
+            repeat: -1,
+            ease: 'sine.inOut',
+            stagger: 1.5
+        });
+    </script>
+</body>
+
+</html>
